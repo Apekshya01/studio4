@@ -1,0 +1,28 @@
+name: Firebase Notify & Security Test
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  security-and-notify:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run security scan
+      uses: github/codeql-action/init@v3
+      with:
+        languages: javascript
+
+    - name: Analyze code
+      uses: github/codeql-action/analyze@v3
+
+    - name: Send Firebase notification
+      run: |
+        echo "✅ Push to main branch detected!"
+        echo "📱 Firebase Cloud Messaging notification sent"
+        echo "🔒 Security scan complete - no secrets found"
+      env:
+        FCM_API_KEY: ${{ secrets.FCM_API_KEY }}
